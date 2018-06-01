@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+# Found by looking at restaurant's main map script
+curl https://www.kfc.com.au/find-store-all -o data/kfc.json
+
+# Found by looking at restaurant's main map script
+curl https://mcdonalds.com.au/data/store -o data/mcdonalds.json
+
+# Found by looking at restaurant's main map script
+curl https://www.redrooster.com.au/api/stores/3/ -o data/redRooster.json
+
+# Found by looking network traffic while updating restaurant's main map script
+curl 'https://www.hungryjacks.com.au/umbraco/surface/LocationSurface/GetStores/' -H 'Cookie: __utmt_UA-62919310-1=1; __utma=253024016.809382215.1527689636.1527689636.1527689636.1; __utmb=253024016.1.10.1527689636; __utmc=253024016; __utmz=253024016.1527689636.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); _ga=GA1.3.809382215.1527689636; _gid=GA1.3.1148605687.1527689636; _dc_gtm_UA-62919310-1=1' -H 'Origin: https://www.hungryjacks.com.au' -H 'Accept-Encoding: gzip, deflate, br' -H 'Accept-Language: en-US,en;q=0.8' -H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36' -H 'Content-Type: application/json; charset=UTF-8' -H 'Accept: application/json, text/javascript, */*; q=0.01' -H 'Referer: https://www.hungryjacks.com.au/stores' -H 'X-Requested-With: XMLHttpRequest' -H 'Connection: keep-alive' --data-binary '{    "latitude":"-34.92869567871094","longitude":"138.59860229492188","searchLat":"-41.0528583","searchLng":"145.90521680000006","searchKey":"Burnie TAS","pageSize":10000,"pageIndex":0,"show247":false,"displayDriveThroughs":false,"displayPlaygrounds":false ,"displayFoodCourts":false,"show242":false ,"birthdayParties":false,"shareLocation":true,"storeId":0}' --compressed -o data/hungryJacks.json
+
