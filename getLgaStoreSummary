@@ -1,0 +1,79 @@
+#!/usr/bin/env python3
+
+import fiona
+import json
+from shapely.geometry import Point, MultiPolygon, Polygon, asShape
+from fileHandling import getJsonData, saveJsonFile 
+
+def checkShapeContainsPoint(polygon, point):
+    shape = asShape(polygon)
+    if shape.contains(point):
+        return True
+    return False
+
+def checkPolygonContainsLngLat(polygon, lngLat):
+    if lngLat is None:
+        return False
+    point = Point(lngLat[0], lngLat[1])
+    return checkShapeContainsPoint(polygon, point)
+
+def getMultiPolygon(coordinatesList):
+    createdPolygons = []
+    for coordinates in coordinatesList:
+        polygon = Polygon(coordinates[0])
+        createdPolygons.append(polygon)
+    multiPolygon = MultiPolygon(polygons=createdPolygons)
+    return multiPolygon
+
+def getPolygonByType(coordinates, polygonType):
+    if geometryType == "MultiPolygon":
+        polygon = getMultiPolygon(coordinates)
+    else:
+        polygon = Polygon(coordinates[0])
+    return polygon
+
+def removePlacedPoints(allStoresLngLat, indexesOfPlacedPoints):
+    """
+    Best to iterate backwards so that index to be deleted isn't shifted.
+    """
+    for i in reversed(indexesOfPlacedPoints):
+        del allStoresLngLat[i]
+
+def giveUserStatus(lgaName, allStoresLngLat):
+    print("Getting data for {}".format(lgaName))
+    print("{} points to check".format(len(allStoresLngLat)))
+
+def countAllLngLatWithinShape(allStoresLngLat, polygon):
+    lgaStoreCount = 0
+    indexesOfPlacedPoints = []
+    for i, storeLngLat in enumerate(allStoresLngLat):
+        if checkPolygonContainsLngLat(polygon, storeLngLat):
+            indexesOfPlacedPoints.append(i)
+            lgaStoreCount += 1
+    removePlacedPoints(allStoresLngLat, indexesOfPlacedPoints)
+    return lgaStoreCount
+
+if __name__ == "__main__":
+    allStoresLngLat = getJsonData("data/allStoresLngLat.json")
+    shapeData = getJsonData("data/LGA_2017_AUST.json")
+    lgaStoreSummary = {}
+
+    for shape in shapeData["features"]:
+        lgaName = shape["properties"]["LGA_NAME17"]
+
+        giveUserStatus(lgaName, allStoresLngLat)
+
+        geometry = shape["geometry"]
+        if geometry is None:
+            print("{} EXCLUDED - not a physical shape".format(lgaName))
+            continue
+
+        coordinates = geometry["coordinates"]
+        geometryType = geometry["type"]
+
+        polygon = getPolygonByType(coordinates, geometryType)
+
+        lgaStoreSummary[lgaName] = countAllLngLatWithinShape(allStoresLngLat, polygon)
+
+    saveJsonFile("data/lgaStoreCounts.json", lgaStoreCounts)
+
