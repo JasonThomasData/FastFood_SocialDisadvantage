@@ -1,0 +1,47 @@
+#!/usr/bin/env python3
+
+import json
+from fileHandling import getJsonData, saveJsonFile
+
+def getHungryJacksLngLat(data):
+    return [float(data["Longtidute"]), float(data["Latidute"])]
+
+def getKfcLngLat(data):
+    return [float(data["lng"]), float(data["lat"])]
+
+def getMcdonaldsLngLat(data):
+    lngLat = data["store_geocode"].split(',')
+    return [float(lngLat[0]), float(lngLat[1])]
+
+def getRedRoosterLngLat(data):
+    try:
+        return [float(data["longitude"]), float(data["latitude"])]
+    except TypeError:
+        pass
+
+def addLngLatIfNotNone(point, points):
+    if point is not None:
+        points.append(point)
+
+def getLngLat(datum, callback):
+    points = []
+    for data in datum:
+        point = callback(data)
+        addLngLatIfNotNone(point, points)
+    return points
+
+if __name__ == "__main__":
+    hungryJacksDatum = getJsonData("data/hungryJacks.json")
+    kfcDatum = getJsonData("data/kfc.json")
+    mcdonaldsDatum = getJsonData("data/mcdonalds.json")
+    redRoosterDatum = getJsonData("data/redRooster.json")
+
+    hungryJacksLngLat = getLngLat(hungryJacksDatum, getHungryJacksLngLat)
+    kfcLngLat = getLngLat(kfcDatum, getKfcLngLat)
+    mcdonaldsLngLat = getLngLat(mcdonaldsDatum, getMcdonaldsLngLat)
+    redRoosterLngLat = getLngLat(redRoosterDatum, getRedRoosterLngLat) #One of these is missing lngLat values
+
+    allStoresLngLat = hungryJacksLngLat + kfcLngLat + mcdonaldsLngLat + redRoosterLngLat
+
+    saveJsonFile("data/allStoresLngLat.json", allStoresLngLat)
+
