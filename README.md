@@ -6,7 +6,7 @@ Steps to reproduce:
 
     ./collectRestaurantData
     ./combineRestaurantData
-    collectABSData.md (Manual steps)
-    ./countRestaurantsPerLGA
+    #collectABSData.md (Manual steps)
+    ./getLgaStoreSummary
+    ./checkSums
 
-If you want to filter the types of restaurants to compare, those can be completed in the last step.
