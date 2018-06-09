@@ -4,8 +4,8 @@ from fileHandling import getJsonData
 
 def getTotalStoreSummary(lgaStoreSummary):
     totalStoreCount = 0
-    for key, value in lgaStoreSummary.items():
-        totalStoreCount += value
+    for lngLat in lgaStoreSummary:
+        totalStoreCount += lngLat["stores"]
     return totalStoreCount
 
 def getTotalNullLngLat(allStoresLngLat):

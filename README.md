@@ -10,3 +10,9 @@ Steps to reproduce:
     ./getLgaStoreSummary
     ./checkSums
 
+For the rest, do:
+    - import SEIFA csv as dataframe
+    - import lgaStoreSummary json as dataframe
+    - inner join the dataframes on matching Lga names
+    - check the length of the dataframe is the same as the lgaStoreSummary datafile
+

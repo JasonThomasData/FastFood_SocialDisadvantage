@@ -4,31 +4,43 @@ import json
 from fileHandling import getJsonData, saveJsonFile
 
 def getHungryJacksLngLat(data):
-    return [float(data["Longtidute"]), float(data["Latidute"])]
+    return {
+        "store": "Hungry Jacks",
+        "lngLat": [float(data["Longtidute"]), float(data["Latidute"])]
+    }
 
 def getKfcLngLat(data):
-    return [float(data["lng"]), float(data["lat"])]
+    return {
+        "store": "KFC",
+        "lngLat": [float(data["lng"]), float(data["lat"])]
+    }
 
 def getMcdonaldsLngLat(data):
     lngLat = data["store_geocode"].split(',')
-    return [float(lngLat[0]), float(lngLat[1])]
+    return {
+        "store": "McDonalds",
+        "lngLat": [float(lngLat[0]), float(lngLat[1])]
+    }
 
 def getRedRoosterLngLat(data):
     try:
-        return [float(data["longitude"]), float(data["latitude"])]
+        return {
+            "store": "Red Rooster",
+            "lngLat": [float(data["longitude"]), float(data["latitude"])]
+        }
     except TypeError:
-        pass
+        return None
 
-def addLngLatIfNotNone(point, points):
-    if point is not None:
-        points.append(point)
+def addLngLatIfNotNone(lngLatData, lngLatDatum):
+    if lngLatData is not None:
+        lngLatDatum.append(lngLatData)
 
-def getLngLat(datum, callback):
-    points = []
-    for data in datum:
-        point = callback(data)
-        addLngLatIfNotNone(point, points)
-    return points
+def getLngLat(rawDatum, callback):
+    lngLatDatum = []
+    for rawData in rawDatum:
+        lngLatData = callback(rawData)
+        addLngLatIfNotNone(lngLatData, lngLatDatum)
+    return lngLatDatum
 
 if __name__ == "__main__":
     hungryJacksDatum = getJsonData("data/hungryJacks.json")
@@ -39,7 +51,7 @@ if __name__ == "__main__":
     hungryJacksLngLat = getLngLat(hungryJacksDatum, getHungryJacksLngLat)
     kfcLngLat = getLngLat(kfcDatum, getKfcLngLat)
     mcdonaldsLngLat = getLngLat(mcdonaldsDatum, getMcdonaldsLngLat)
-    redRoosterLngLat = getLngLat(redRoosterDatum, getRedRoosterLngLat) #One of these is missing lngLat values
+    redRoosterLngLat = getLngLat(redRoosterDatum, getRedRoosterLngLat)
 
     allStoresLngLat = hungryJacksLngLat + kfcLngLat + mcdonaldsLngLat + redRoosterLngLat
 

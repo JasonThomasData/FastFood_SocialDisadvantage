@@ -15,20 +15,15 @@ Open first sheet, replace "score" with relevant index names, remove colums that 
     Index of Education and Occupation,
     Usual Resident Population
 
-Save it at data/
+Save it at data/lgaSeifa.csv
 
-Manually download the ASGS LGA ESRI digital boundaries shapefile
+Manually download the ASGS LGA ESRI digital boundaries shapefile for 2016
 
-    http://www.abs.gov.au/AUSSTATS/abs@.nsf/DetailsPage/1270.0.55.003July%202017?OpenDocument
+    http://www.abs.gov.au/AUSSTATS/abs@.nsf/DetailsPage/1270.0.55.003July%202016?OpenDocument
 
-Should be called `1270055003_lga_2017_aust_shp.zip`
+Should be called `1270055003_lga_2016_aust_shape.zip`
 
 Unzip the file:
 
-    unzip data/1270055003_lga_2017_aust_shp.zip -d data/
+    unzip data/1270055003_lga_2016_aust_shape.zip -d data/
 
-Upload all files to this website: `http://mapshaper.org/`
-
-Export the dataset as json to `LGA_2017_AUST.json`
-
-Move it to data/

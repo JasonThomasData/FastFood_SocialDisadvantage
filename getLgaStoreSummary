@@ -3,7 +3,7 @@
 import fiona
 import json
 from shapely.geometry import Point, MultiPolygon, Polygon, asShape
-from fileHandling import getJsonData, saveJsonFile 
+from fileHandling import getJsonData, getShapeData, saveJsonFile 
 
 def checkShapeContainsPoint(polygon, point):
     shape = asShape(polygon)
@@ -32,40 +32,54 @@ def getPolygonByType(coordinates, polygonType):
         polygon = Polygon(coordinates[0])
     return polygon
 
-def removePlacedPoints(allStoresLngLat, indexesOfPlacedPoints):
+def removePlacedPoints(allStoresData, indexesOfPlacedPoints):
     """
     Best to iterate backwards so that index to be deleted isn't shifted.
     """
     for i in reversed(indexesOfPlacedPoints):
-        del allStoresLngLat[i]
+        del allStoresData[i]
 
-def giveUserStatus(lgaName, allStoresLngLat):
-    print("Getting data for {}".format(lgaName))
-    print("{} points to check".format(len(allStoresLngLat)))
+def giveUserStatus(lgaData, allStoresData):
+    print("Data for {} {}".format(lgaData["lgaCode"], lgaData["lgaName"]))
+    print("{} stores in this lga".format(lgaData["stores"]))
+    print("{} points to check".format(len(allStoresData)))
 
-def countAllLngLatWithinShape(allStoresLngLat, polygon):
+def summariseStoresWithinShape(allStoresData, lgaData, polygon):
     lgaStoreCount = 0
     indexesOfPlacedPoints = []
-    for i, storeLngLat in enumerate(allStoresLngLat):
+    for i, storeData in enumerate(allStoresData):
+        storeName = storeData["store"]
+        storeLngLat = storeData["lngLat"]
         if checkPolygonContainsLngLat(polygon, storeLngLat):
             indexesOfPlacedPoints.append(i)
-            lgaStoreCount += 1
-    removePlacedPoints(allStoresLngLat, indexesOfPlacedPoints)
-    return lgaStoreCount
+            lgaData[storeName] += 1
+    removePlacedPoints(allStoresData, indexesOfPlacedPoints)
+
+def getTotalStoresForLga(lgaData):
+    total = lgaData["Hungry Jacks"] + lgaData["KFC"] + lgaData["McDonalds"] + lgaData["Red Rooster"]
+    lgaData["stores"] = total
+
+def addToLgaStoreSummary(lgaStoreSummary, lgaData):
+    lgaStoreSummary.append(lgaData)
 
 if __name__ == "__main__":
-    allStoresLngLat = getJsonData("data/allStoresLngLat.json")
-    shapeData = getJsonData("data/LGA_2017_AUST.json")
-    lgaStoreSummary = {}
+    allStoresData = getJsonData("data/allStoresLngLat.json")
+    shapeData = getShapeData("data/LGA_2016_AUST.shp")
+    lgaStoreSummary = []
 
-    for shape in shapeData["features"]:
-        lgaName = shape["properties"]["LGA_NAME17"]
-
-        giveUserStatus(lgaName, allStoresLngLat)
+    for shape in shapeData:
+        lgaData = {
+            "lgaName" : shape["properties"]["LGA_NAME16"],
+            "lgaCode" : shape["properties"]["LGA_CODE16"],
+            "Hungry Jacks" : 0,
+            "KFC" : 0,
+            "McDonalds" : 0,
+            "Red Rooster" : 0,
+            "stores" : 0
+        }
 
         geometry = shape["geometry"]
         if geometry is None:
-            print("{} EXCLUDED - not a physical shape".format(lgaName))
             continue
 
         coordinates = geometry["coordinates"]
@@ -73,7 +87,11 @@ if __name__ == "__main__":
 
         polygon = getPolygonByType(coordinates, geometryType)
 
-        lgaStoreSummary[lgaName] = countAllLngLatWithinShape(allStoresLngLat, polygon)
+        summariseStoresWithinShape(allStoresData, lgaData, polygon)
+        getTotalStoresForLga(lgaData)
+        addToLgaStoreSummary(lgaStoreSummary, lgaData)
 
-    saveJsonFile("data/lgaStoreCounts.json", lgaStoreCounts)
+        giveUserStatus(lgaData, allStoresData)
+
+    saveJsonFile("data/lgaStoreSummary.json", lgaStoreSummary)
 
