@@ -6,7 +6,7 @@ from fileHandling import getJsonData, saveJsonFile
 def getHungryJacksLngLat(data):
     return {
         "store": "Hungry Jacks",
-        "lngLat": [float(data["Longtidute"]), float(data["Latidute"])]
+        "lngLat": [float(data["location"]["long"]), float(data["location"]["lat"])]
     }
 
 def getKfcLngLat(data):

@@ -1,0 +1,6 @@
+venv/
+__pycache__/
+data/hungryJacks.json
+data/kfc.json
+data/mcdonalds.json
+data/redRooster.json
