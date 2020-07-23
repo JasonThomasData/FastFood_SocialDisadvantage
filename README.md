@@ -3,6 +3,7 @@
 This is some research I wanted to do regarding fast food and social disadvantage.
 
 Steps to reproduce:
+
     # use Python >= 3.6
     pip install -r requirements.txt
     ./collectRestaurantData.sh
