@@ -8,7 +8,7 @@ Steps to reproduce:
     pip install -r requirements.txt
     ./collectRestaurantData.sh
     ./combineRestaurantData.py
-    follow manual steps in collectABSData.md
+    # follow manual steps in collectABSData.md
     ./getLgaStoreSummary.py #This part is very slow, would be good to make it faster
     ./checkSums.py
     jupyter notebook #read through notebook to see results
