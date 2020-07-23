@@ -13,7 +13,9 @@ Steps to reproduce:
     jupyter notebook #read through notebook to see results
 
 Briefly, here's what this shows us:
+
 ![plot of fast food vs social disadvantage](fastfood_socialdisadvantage.png)
+
 This is for 270-odd LGAs, since many LGAs don't have any restaurants of these brands.
 
 Questions about data
