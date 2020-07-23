@@ -3,21 +3,24 @@
 This is some research I wanted to do regarding fast food and social disadvantage.
 
 Steps to reproduce:
-
+    # use Python >= 3.6
+    pip install -r requirements.txt
     ./collectRestaurantData.sh
     ./combineRestaurantData.py
     follow manual steps in collectABSData.md
     ./getLgaStoreSummary.py #This part is very slow, would be good to make it faster
     ./checkSums.py
+    jupyter notebook #read through notebook to see results
 
-For the rest, do:
-    - import SEIFA csv as dataframe
-    - import lgaStoreSummary json as dataframe
-    - inner join the dataframes on matching Lga names
-    - check the length of the dataframe is the same as the lgaStoreSummary datafile
+Briefly, here's what this shows us:
+![plot of fast food vs social disadvantage](fastfood_socialdisadvantage.png)
+This is for 270-odd LGAs, since many LGAs don't have any restaurants of these brands.
 
 Questions about data
 - Is SEIFA an indication that communities are more likely to face poverty?
 - Are people currently less or more likely to be buying takeaway food? Are they more likely to buy food close to them?
 - Are the data of restaurants exhaustive, or are there stores that are not on the maps?
 - Is comparing SIEFA to restaurants per population a good statistic? Is this a significant correlation?
+- How do chains decide if stores in different areas will be successful? Is there a threshold to how much surplus money people have?
+- With all areas considered, there are many less advantaged areas that have no stores. Where chains do have stores, they are more likely to be in less advantaged areas, per population. Why is this?
+- Regarding areas that do not have stores, do those have something in common?
