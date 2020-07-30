@@ -17,6 +17,8 @@ Briefly, here's what this shows us:
 
 ![plot of fast food vs social disadvantage](fastfood_socialdisadvantage.png)
 
+This appears to show that there is a weak positive correlation between a) stores per population, and b) the relative socioeconomic disadvantage, across Australia. It would be interesting to see if this changes after the 2021 Australian Census, since the ABS would release another SEIFA index.
+
 This is for 270-odd LGAs, since many LGAs don't have any restaurants of these brands.
 
 ### Questions about data
